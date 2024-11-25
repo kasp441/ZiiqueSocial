@@ -16,7 +16,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-var envConnectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
+var envConnectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 if (!string.IsNullOrWhiteSpace(envConnectionString))
 {
     connectionString = envConnectionString;
@@ -30,15 +30,20 @@ builder.Services.AddDbContext<RepoContext>(options =>
 
 var app = builder.Build();
 
+app.MapControllers();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.MapControllers();
 }
 
 app.UseHttpsRedirection();
+
+var testGroup = app.MapGroup("/test");
+
+testGroup.MapGet("/test", () => "Test");
 
 
 app.Run();
