@@ -1,5 +1,6 @@
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { Switch } from "../ui/switch";
 
 export function NewPost() {
   return (
@@ -11,15 +12,18 @@ export function NewPost() {
         </CardHeader>
         <CardContent className="flex-1">
             <form>
-                <div>
-                    <label htmlFor="title">Title</label>
-                    <input type="text" placeholder="Title" className="w-full" />
+                <div className="flex flex-col items-start">
+                    <label className="font-bold" htmlFor="title">Title</label>
+                    <input type="text" placeholder="I saw on the bustop" className="w-full" />
                 </div>
-               <div>
-                    <label htmlFor="Content">Content</label>
-                    <textarea placeholder="Content" className="w-full" />
-               </div>
-                
+                <div className="flex flex-col items-start">
+                    <label className="font-bold" htmlFor="Content">Content</label>
+                    <textarea placeholder="One old lady, that could lift..." className="w-full min-h-32" />
+                </div>
+                <div className="flex flex-col items-start">
+                    <label className="font-bold" htmlFor="onlyFolowers">Only Folowers</label>
+                    <Switch id="onlyFolowers"/>
+                </div>
             </form>
         </CardContent>
         <CardFooter className="flex justify-between">

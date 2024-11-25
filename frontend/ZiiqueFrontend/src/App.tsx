@@ -21,7 +21,7 @@ function App() {
     <>
       <div className="bg-background">
         <div className="grid grid-cols-2 sticky top-10">
-          <h1 className="justify-self-start box-decoration-clone bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-2">
+          <h1 className="justify-self-start box-decoration-clone bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-2 rounded-md font-bold text-2xl">
             Ziique
             <br />
             Social
