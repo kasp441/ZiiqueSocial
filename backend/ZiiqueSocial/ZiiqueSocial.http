@@ -1,6 +1,0 @@
-@ZiiqueSocial_HostAddress = http://localhost:5062
-
-GET {{ZiiqueSocial_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
