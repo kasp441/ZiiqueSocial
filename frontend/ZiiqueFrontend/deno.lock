@@ -1243,6 +1243,7 @@
         "npm:lucide-react@0.460",
         "npm:postcss@^8.4.49",
         "npm:react-dom@^18.3.1",
+        "npm:react-router-dom@^7.0.1",
         "npm:react@^18.3.1",
         "npm:tailwind-merge@^2.5.4",
         "npm:tailwindcss-animate@^1.0.7",
