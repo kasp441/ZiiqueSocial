@@ -6,13 +6,11 @@ namespace Repo
 {
     public class RepoContext : DbContext
     {
-
-        //db sets here
         public DbSet<Profile> Profiles { get; set; }
-        public DbSet<Login> Logins { get; set; }
         public DbSet<Follows> Follows { get; set; }
         public RepoContext(DbContextOptions<RepoContext> options) : base(options)
         {
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
