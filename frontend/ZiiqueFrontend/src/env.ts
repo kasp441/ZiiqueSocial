@@ -1,0 +1,1 @@
+export const postServiceUrl = "http://localhost:8080/Post";

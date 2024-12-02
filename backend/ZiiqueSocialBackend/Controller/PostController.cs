@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Domain;
+using Domain.Dto;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Service;
@@ -27,7 +28,7 @@ public class PostController : ControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(PaginationFilter<Post>), 200)]
     [ProducesResponseType(500)]
-    public async Task<IActionResult> GetPosts(PaginationFilterDRO pagination)
+    public async Task<IActionResult> GetPosts([FromQuery]PaginationFilterDRO pagination)
     {
         try
         {
@@ -49,7 +50,7 @@ public class PostController : ControllerBase
     [ProducesResponseType(typeof(Post), 200)]
     [ProducesResponseType(typeof(BadRequest), 400)]
     [ProducesResponseType(500)]
-    public async Task<IActionResult> CreatePost(Post post)
+    public async Task<IActionResult> CreatePost(PostDto post)
     {
         try
         {

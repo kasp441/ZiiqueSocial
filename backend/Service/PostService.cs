@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Dto;
 using Repo;
 
 namespace Service;
@@ -16,8 +17,16 @@ public class PostService : IPostService
         return await _postRepo.GetPosts(pagination);
     }
 
-    public async Task<Post> CreatePost(Post post)
+    public async Task<Post> CreatePost(PostDto postDto)
     {
+        Post post = new Post()
+        {
+            Id = new Guid(),
+            Title = postDto.Title,
+            Content = postDto.Content,
+            CreatedAt = postDto.CreatedAt,
+            ProfileId = postDto.ProfileId
+        };
         await _postRepo.CreatePost(post);
         return post;
     }

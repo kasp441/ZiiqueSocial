@@ -15,7 +15,7 @@ public class PostRepo : IPostRepo
     {
         //TODO: Check after if the user is allowed too see the posts
         var posts = await _context.Posts
-            .Skip(pagination.Skip)
+            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
             .Take(pagination.PageSize)
             .ToListAsync();
         var totalRecords = _context.Posts.Count();

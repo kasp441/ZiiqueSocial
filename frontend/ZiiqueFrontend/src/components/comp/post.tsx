@@ -50,7 +50,7 @@ export function Post({ title, content, date, userIcon, userName }: PostProps) {
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button className="bg-Primary">Like</Button>
-        <p>{date.toDateString()}</p>
+        <p>{new Date(date).toDateString()}</p>
       </CardFooter>
     </Card>
   );
