@@ -10,6 +10,7 @@ namespace Repo
         //db sets here
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Login> Logins { get; set; }
+        public DbSet<Post> Posts { get; set; }
         public RepoContext(DbContextOptions<RepoContext> options) : base(options)
         {
         }
@@ -18,6 +19,9 @@ namespace Repo
         {
             modelBuilder.Entity<Profile>()
                 .HasKey(p => p.Guid);
+
+            modelBuilder.Entity<Post>()
+                .HasKey(p => p.Id);
         }
     }
 }
