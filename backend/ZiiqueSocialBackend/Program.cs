@@ -12,6 +12,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
 
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
