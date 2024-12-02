@@ -6,6 +6,8 @@ services:
       POSTGRES_USER: Ziique
       POSTGRES_PASSWORD: SuperSecret7!
       POSTGRES_DB: ZiiqueSocialDb
+    ports:
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
       

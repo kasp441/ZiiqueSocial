@@ -25,10 +25,23 @@ if (!string.IsNullOrWhiteSpace(envConnectionString))
 //add connection string here
 builder.Services.AddDbContext<RepoContext>(options =>
 {
-    options.UseNpgsql("connectionString");
+    options.UseNpgsql(connectionString, b => b.MigrationsAssembly("ZiiqueSocialBackend"));
 });
 
 var app = builder.Build();
+
+//apply migrations if any
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<RepoContext>();
+
+    if (context.Database.GetPendingMigrations != null)
+    {
+        context.Database.Migrate();
+
+    }
+}
 
 app.MapControllers();
 

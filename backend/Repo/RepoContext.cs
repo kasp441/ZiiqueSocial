@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain;
+
 
 namespace Repo
 {
@@ -11,9 +8,16 @@ namespace Repo
     {
 
         //db sets here
-
+        public DbSet<Profile> Profiles { get; set; }
+        public DbSet<Login> Logins { get; set; }
         public RepoContext(DbContextOptions<RepoContext> options) : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Profile>()
+                .HasKey(p => p.Guid);
         }
     }
 }
