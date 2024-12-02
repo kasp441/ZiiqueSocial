@@ -7,7 +7,7 @@ export function NewPost() {
     <Card className="w-1/2 min-h-96 border-Accent border-4 flex flex-col">
         <CardHeader className="border-b-2 border-Accent">
             <CardTitle className="flex justify-between text-text">
-                New Post
+                What's on your mind?
             </CardTitle>
         </CardHeader>
         <CardContent className="flex-1">

@@ -17,7 +17,7 @@ export function Home() {
         <br />
         <Post
           title="My second post very looooooooooong post to see if it react correct"
-          content="I love donuts"
+          content="I love donuts https://www.youtube.com/watch?v=Vd4jKRzpF1Q"
           date={new Date()}
           userIcon="Robert"
           userName="FrogOnlyInJg"
