@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repo;
@@ -11,9 +12,11 @@ using Repo;
 namespace ZiiqueSocialBackend.Migrations
 {
     [DbContext(typeof(RepoContext))]
-    partial class RepoContextModelSnapshot : ModelSnapshot
+    [Migration("20241202105009_AddedFollows")]
+    partial class AddedFollows
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,29 +24,6 @@ namespace ZiiqueSocialBackend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Domain.Follows", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<Guid>("followsGuid")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("profileGuid")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("followsGuid");
-
-                    b.HasIndex("profileGuid");
-
-                    b.ToTable("Follows");
-                });
 
             modelBuilder.Entity("Domain.Login", b =>
                 {
@@ -78,6 +58,9 @@ namespace ZiiqueSocialBackend.Migrations
                     b.Property<int>("LoginId")
                         .HasColumnType("integer");
 
+                    b.Property<Guid?>("ProfileGuid")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("StartedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -101,26 +84,9 @@ namespace ZiiqueSocialBackend.Migrations
 
                     b.HasIndex("LoginId");
 
+                    b.HasIndex("ProfileGuid");
+
                     b.ToTable("Profiles");
-                });
-
-            modelBuilder.Entity("Domain.Follows", b =>
-                {
-                    b.HasOne("Domain.Profile", "follows")
-                        .WithMany()
-                        .HasForeignKey("followsGuid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Profile", "profile")
-                        .WithMany()
-                        .HasForeignKey("profileGuid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("follows");
-
-                    b.Navigation("profile");
                 });
 
             modelBuilder.Entity("Domain.Profile", b =>
@@ -131,7 +97,16 @@ namespace ZiiqueSocialBackend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Profile", null)
+                        .WithMany("Follows")
+                        .HasForeignKey("ProfileGuid");
+
                     b.Navigation("Login");
+                });
+
+            modelBuilder.Entity("Domain.Profile", b =>
+                {
+                    b.Navigation("Follows");
                 });
 #pragma warning restore 612, 618
         }
