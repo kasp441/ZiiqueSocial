@@ -4,6 +4,6 @@ namespace Service
 {
     public interface IUserService
     {
-        ProfileDto CreateUser(LoginDto loginDto, ProfileDto profileDto);
+        ProfileDto CreateUser(ProfileDto profileDto, string authId);
     }
 }

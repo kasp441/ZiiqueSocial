@@ -1,3 +1,6 @@
+using AutoMapper;
+using Domain;
+using Domain.Dto;
 using Microsoft.EntityFrameworkCore;
 using Repo;
 using Service;
@@ -13,6 +16,14 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
+
+var mapper = new MapperConfiguration(config =>
+{
+    config.CreateMap<ProfileDto, Domain.Profile>();
+    config.CreateMap<Domain.Profile, ProfileDto>();
+}).CreateMapper();
+
+builder.Services.AddSingleton(mapper);
 
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

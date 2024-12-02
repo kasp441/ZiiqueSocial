@@ -12,8 +12,7 @@ namespace Repo
         Profile GetProfile(Guid id);
 
         List<Profile> GetAllProfiles();
-
-        void AddProfile(Profile profile);
+        Profile AddProfile(Profile profile);
 
         void RemoveProfile(Guid id);
 
