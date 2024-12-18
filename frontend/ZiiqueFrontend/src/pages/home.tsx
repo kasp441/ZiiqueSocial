@@ -66,7 +66,7 @@ export function Home() {
         <NewPost />
         <br/>
         {posts.items.map((post, index) => (
-          <div key={post.id} ref={index === posts.items.length - 1 ? lastPostElementRef : null}>
+          <div className="w-1/2 pb-5" key={post.id} ref={index === posts.items.length - 1 ? lastPostElementRef : null}>
             <Post
               title={post.title}
               content={post.content}
@@ -82,6 +82,11 @@ export function Home() {
         <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
+      </div>
+    )}
+    {!hasMore && !loading && (
+      <div className="flex justify-center items-center">
+        <h1>YOU HAVE SEEN EVERYTHING</h1>
       </div>
     )}
     </div>

@@ -26,7 +26,7 @@ export function Post({ title, content, date, userIcon, userName }: PostProps) {
         : content.split("https://www.youtube.com/watch?v=")[0];
   }
   return (
-    <Card className="w-1/2 min-h-96 border-Accent border-4 flex flex-col">
+    <Card className="min-h-96 border-Accent border-4 flex flex-col">
       <CardHeader className="bg-Accent">
         <CardTitle className="flex justify-between text-background">
           <div className="self-center text-left line-clamp-1 max-w-96">
