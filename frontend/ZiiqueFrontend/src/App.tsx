@@ -3,11 +3,10 @@ import { useAuth0 } from '@auth0/auth0-react';
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import { Home } from "./pages/home";
-import { useState } from "react";
 import { Button } from "./components/ui/button";
 
 function App() {
-  const { loginWithRedirect, logout, user, isAuthenticated, isLoading } = useAuth0();
+  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
   const button = isAuthenticated ? (
     <Button onClick={() => logout()}>Logout</Button>

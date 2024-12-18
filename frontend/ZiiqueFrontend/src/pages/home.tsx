@@ -3,12 +3,14 @@ import { Posts } from "../Entities/BackendEnt";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { postService } from "@/components/services/postService";
 import { Post } from "@/components/comp/post";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function Home() {
   const [posts, setPosts] = useState<Posts>({ items: [], pageNumber: 0, pageSize: 0, totalPages: 0, totalRecords: 0 });
   const [loading, setLoading] = useState<boolean>(false);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const { isAuthenticated } = useAuth0();
 
   const observer = useRef<IntersectionObserver | null>(null);
   const isInitialLoad = useRef<boolean>(true);
@@ -63,7 +65,9 @@ export function Home() {
   return (
     <div className="grid grid-cols-1">
       <div className="justify-items-center">
-        <NewPost />
+        {isAuthenticated && (
+          <NewPost />
+        )}
         <br/>
         {posts.items.map((post, index) => (
           <div className="w-1/2 pb-5" key={post.id} ref={index === posts.items.length - 1 ? lastPostElementRef : null}>
