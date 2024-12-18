@@ -1,35 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import { Button } from './components/ui/button'
+import { useAuth0 } from '@auth0/auth0-react';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { loginWithRedirect, logout, user, isAuthenticated, isLoading } = useAuth0();
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <h1>ShadCN UI</h1>
-        <Button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <button onClick={() => loginWithRedirect()}>Log In</button>
+      <button onClick={() => logout()}>Log Out</button>
+
+      {isLoading && <p>Loading...</p>}
+      {isAuthenticated && (
+        <div>
+          <p>Hello, {user?.name}</p>
+          <p>Email: {user?.email}</p>
+        </div>
+      )}
     </>
   )
 }
