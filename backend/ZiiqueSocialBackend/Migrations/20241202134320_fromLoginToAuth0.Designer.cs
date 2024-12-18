@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repo;
@@ -11,9 +12,11 @@ using Repo;
 namespace ZiiqueSocialBackend.Migrations
 {
     [DbContext(typeof(RepoContext))]
-    partial class RepoContextModelSnapshot : ModelSnapshot
+    [Migration("20241202134320_fromLoginToAuth0")]
+    partial class fromLoginToAuth0
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,56 +46,6 @@ namespace ZiiqueSocialBackend.Migrations
                     b.HasIndex("profileGuid");
 
                     b.ToTable("Follows");
-                });
-
-            modelBuilder.Entity("Domain.Login", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<byte[]>("password")
-                        .IsRequired()
-                        .HasColumnType("bytea");
-
-                    b.Property<string>("username")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Logins");
-                });
-
-            modelBuilder.Entity("Domain.Post", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("ProfileId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Domain.Profile", b =>

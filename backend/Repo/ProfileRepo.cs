@@ -14,10 +14,11 @@ namespace Repo
         {
             _context = context;
         }
-        public void AddProfile(Profile profile)
+        public Profile AddProfile(Profile profile)
         {
             _context.Profiles.Add(profile);
             _context.SaveChanges();
+            return profile;
         }
 
         public List<Profile> GetAllProfiles()
