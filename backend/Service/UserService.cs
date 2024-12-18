@@ -17,14 +17,13 @@ namespace Service
             _mapper = mapper;
         }
 
-        public ProfileDto CreateUser(ProfileDto profileDto, string AuthId)
+        public Guid CreateUser(ProfileDto profileDto)
         {
             //map to domain objects
             var profile = _mapper.Map<Domain.Profile>(profileDto);
 
-            profile.authId = AuthId;
 
-            return _mapper.Map<ProfileDto>(_profileRepo.AddProfile(profile));
+            return _profileRepo.AddProfile(profile).Guid;
         }
     }
 }

@@ -10,6 +10,5 @@ namespace Domain
         public string profileIcon { get; set; }
         public DateTime StartedAt { get; set; }
         public string bio { get; set; }
-        public virtual required string authId { get; set; }
     }
 }
