@@ -16,6 +16,8 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
+builder.Services.AddScoped<IPostRepo, PostRepo>();
+builder.Services.AddScoped<IPostService, PostService>();
 
 var mapper = new MapperConfiguration(config =>
 {
@@ -40,6 +42,15 @@ builder.Services.AddDbContext<RepoContext>(options =>
     options.UseNpgsql(connectionString, b => b.MigrationsAssembly("ZiiqueSocialBackend"));
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+        });
+});
+
 var app = builder.Build();
 
 //apply migrations if any
@@ -57,6 +68,8 @@ using (var scope = app.Services.CreateScope())
 
 app.MapControllers();
 
+app.UseCors();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -65,11 +78,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-var testGroup = app.MapGroup("/test");
-
-testGroup.MapGet("/test", () => "Test");
-
 
 app.Run();
 

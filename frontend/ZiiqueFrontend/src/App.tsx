@@ -1,37 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { Button } from './components/ui/button'
+import "./App.css";
+import { Route, Routes } from "react-router-dom";
+import { Home } from "./pages/home";
+import { useState } from "react";
+import { Button } from "./components/ui/button";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setLoggedIn(!loggedIn);
+  };
+
+  const button = loggedIn ? (
+    <Button onClick={handleLogin}>Logout</Button>
+  ) : (
+    <Button onClick={handleLogin}>Login</Button>
+  );
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="bg-background">
+        <div className="grid grid-cols-2 sticky top-10">
+          <h1 className="justify-self-start box-decoration-clone bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-2 rounded-md font-bold text-2xl">
+            Ziique
+            <br />
+            Social
+          </h1>
+          <div className="justify-self-end">{button}</div>
+        </div>
+        <div className="pt-16">
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <h1>ShadCN UI</h1>
-        <Button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

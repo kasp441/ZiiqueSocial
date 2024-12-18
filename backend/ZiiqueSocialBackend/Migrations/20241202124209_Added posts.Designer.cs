@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repo;
@@ -11,9 +12,11 @@ using Repo;
 namespace ZiiqueSocialBackend.Migrations
 {
     [DbContext(typeof(RepoContext))]
-    partial class RepoContextModelSnapshot : ModelSnapshot
+    [Migration("20241202124209_Added posts")]
+    partial class Addedposts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,6 +48,31 @@ namespace ZiiqueSocialBackend.Migrations
                     b.ToTable("Follows");
                 });
 
+            modelBuilder.Entity("Domain.Login", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<byte[]>("password")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Logins");
+                });
+
             modelBuilder.Entity("Domain.Post", b =>
                 {
                     b.Property<Guid>("Id")
@@ -67,8 +95,6 @@ namespace ZiiqueSocialBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProfileId");
-
                     b.ToTable("Posts");
                 });
 
@@ -78,12 +104,11 @@ namespace ZiiqueSocialBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int>("LoginId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("StartedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("authId")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("bio")
                         .IsRequired()
@@ -102,6 +127,8 @@ namespace ZiiqueSocialBackend.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Guid");
+
+                    b.HasIndex("LoginId");
 
                     b.ToTable("Profiles");
                 });
@@ -125,13 +152,15 @@ namespace ZiiqueSocialBackend.Migrations
                     b.Navigation("profile");
                 });
 
-            modelBuilder.Entity("Domain.Post", b =>
+            modelBuilder.Entity("Domain.Profile", b =>
                 {
-                    b.HasOne("Domain.Profile", null)
+                    b.HasOne("Domain.Login", "Login")
                         .WithMany()
-                        .HasForeignKey("ProfileId")
+                        .HasForeignKey("LoginId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Login");
                 });
 #pragma warning restore 612, 618
         }
