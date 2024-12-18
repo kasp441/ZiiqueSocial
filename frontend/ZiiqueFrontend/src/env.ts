@@ -1,0 +1,1 @@
+export const postServiceUrl = "https://localhost:7222/Post";
