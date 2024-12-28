@@ -12,8 +12,8 @@ using Repo;
 namespace ZiiqueSocialBackend.Migrations
 {
     [DbContext(typeof(RepoContext))]
-    [Migration("20241202110557_addedFollows2")]
-    partial class addedFollows2
+    [Migration("20241228152017_newest")]
+    partial class newest
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,28 +48,31 @@ namespace ZiiqueSocialBackend.Migrations
                     b.ToTable("Follows");
                 });
 
-            modelBuilder.Entity("Domain.Login", b =>
+            modelBuilder.Entity("Domain.Post", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("email")
+                    b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("password")
-                        .IsRequired()
-                        .HasColumnType("bytea");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("username")
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Logins");
+                    b.HasIndex("ProfileId");
+
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Domain.Profile", b =>
@@ -78,11 +81,12 @@ namespace ZiiqueSocialBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("LoginId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("StartedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("authId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("bio")
                         .IsRequired()
@@ -101,8 +105,6 @@ namespace ZiiqueSocialBackend.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Guid");
-
-                    b.HasIndex("LoginId");
 
                     b.ToTable("Profiles");
                 });
@@ -126,15 +128,13 @@ namespace ZiiqueSocialBackend.Migrations
                     b.Navigation("profile");
                 });
 
-            modelBuilder.Entity("Domain.Profile", b =>
+            modelBuilder.Entity("Domain.Post", b =>
                 {
-                    b.HasOne("Domain.Login", "Login")
+                    b.HasOne("Domain.Profile", null)
                         .WithMany()
-                        .HasForeignKey("LoginId")
+                        .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Login");
                 });
 #pragma warning restore 612, 618
         }
