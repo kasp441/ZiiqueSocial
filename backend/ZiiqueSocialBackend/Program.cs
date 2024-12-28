@@ -19,6 +19,8 @@ builder.Services.AddScoped<IProfileRepo, ProfileRepo>();
 builder.Services.AddScoped<IPostRepo, PostRepo>();
 builder.Services.AddScoped<IPostService, PostService>();
 
+builder.Services.AddScoped<IRequestData, RequestData>();
+
 var mapper = new MapperConfiguration(config =>
 {
     config.CreateMap<ProfileDto, Domain.Profile>();

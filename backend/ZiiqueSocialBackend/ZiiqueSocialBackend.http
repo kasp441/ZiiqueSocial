@@ -1,9 +1,13 @@
-﻿@ZiiqueSocialBackend_HostAddress = http://localhost:8080
+﻿@ZiiqueSocialBackend_HostAddress = https://localhost:7222
 
 GET {{ZiiqueSocialBackend_HostAddress}}/api/profile/profile
 
 ###
 
 GET {{ZiiqueSocialBackend_HostAddress}}/test/test
+
+###
+
+GET {{ZiiqueSocialBackend_HostAddress}}/requestData
 
 ###
