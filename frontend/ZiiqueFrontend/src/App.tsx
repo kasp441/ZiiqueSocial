@@ -3,39 +3,20 @@ import { Route, Routes } from "react-router-dom";
 import { Home } from "./pages/home";
 import { useState } from "react";
 import { Button } from "./components/ui/button";
+import { ReactKeycloakProvider } from '@react-keycloak/web'
+import keycloak from './keycloak'
 
-function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
 
-  const handleLogin = () => {
-    setLoggedIn(!loggedIn);
-  };
-
-  const button = loggedIn ? (
-    <Button onClick={handleLogin}>Logout</Button>
-  ) : (
-    <Button onClick={handleLogin}>Login</Button>
-  );
-
+const App = () => {
   return (
-    <>
-      <div className="bg-background">
-        <div className="grid grid-cols-2 sticky top-10">
-          <h1 className="justify-self-start box-decoration-clone bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-2 rounded-md font-bold text-2xl">
-            Ziique
-            <br />
-            Social
-          </h1>
-          <div className="justify-self-end">{button}</div>
-        </div>
-        <div className="pt-16">
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
-        </div>
+    <ReactKeycloakProvider authClient={keycloak}>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
       </div>
-    </>
-  );
+    </ReactKeycloakProvider>
+  )
 }
 
 export default App;
