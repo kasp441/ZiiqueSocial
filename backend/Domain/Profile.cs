@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace Domain
+﻿namespace Domain
 {
     public class Profile
     {

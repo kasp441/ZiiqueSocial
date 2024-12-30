@@ -2,6 +2,7 @@
 using Domain;
 using Domain.Dto;
 using Repo;
+using Profile = Domain.Profile;
 
 
 namespace Service
@@ -24,6 +25,11 @@ namespace Service
 
 
             return _profileRepo.AddProfile(profile).Guid;
+        }
+
+        public Profile GetUser(Guid id)
+        {
+            return _profileRepo.GetProfile(id);
         }
     }
 }

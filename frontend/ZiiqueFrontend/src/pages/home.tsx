@@ -73,6 +73,7 @@ export function Home() {
               date={post.createdAt}
               userIcon="Brian"
               userName="SmiteAndSlam"
+              profileId={post.profileId}
             />
           </div>
         ))}

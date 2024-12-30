@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -14,11 +15,18 @@ type PostProps = {
   date: Date;
   userIcon: string;
   userName: string;
+  profileId: string;
 };
 
-export function Post({ title, content, date, userIcon, userName }: PostProps) {
+export function Post({ title, content, date, userIcon, userName, profileId }: PostProps) {
   const hasYoutubeLink = content.includes("https://www.youtube.com/watch?v=");
   const youtubeLink = content.split("https://www.youtube.com/watch?v=")[1];
+  const navigate = useNavigate();
+
+  const goToProfile = () => {
+    navigate(`/profile/${profileId}`);
+  };
+
   if (hasYoutubeLink) {
     content =
       content.indexOf("https://www.youtube.com/watch?v=") === 0
@@ -32,7 +40,8 @@ export function Post({ title, content, date, userIcon, userName }: PostProps) {
           <div className="self-center text-left line-clamp-1 max-w-96">
             {title}
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center"
+            onClick={goToProfile}>
             <p className="mr-2">{userName}</p>
             <img
               src={`https://api.dicebear.com/9.x/fun-emoji/svg?seed=${userIcon}`}

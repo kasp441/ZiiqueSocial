@@ -20,5 +20,11 @@ namespace ZiiqueSocialBackend.Controller
         {
             return Ok(_userService.CreateUser(profileDto));
         }
+        
+        [HttpGet]
+        public IActionResult GetUser([FromQuery] Guid id)
+        {
+            return Ok(_userService.GetUser(id));
+        }
     }
 }
