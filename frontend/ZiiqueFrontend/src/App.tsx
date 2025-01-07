@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button } from "./components/ui/button";
 import { useKeycloak } from "@react-keycloak/web";
 import keycloak from "./security";
+import { Profile } from "./pages/profile";
 
 
 function App() {
@@ -42,6 +43,7 @@ return (
       <div className="pt-16">
         <Routes>
           <Route path="/home" element={<Home />} />
+          <Route path="/profile/:id" element={<Profile />} />
         </Routes>
       </div>
     </div>

@@ -16,9 +16,15 @@ namespace ZiiqueSocialBackend.Controller
 
         [HttpPost]
         [Route("createProfile")]
-        public IActionResult CreateUser(ProfileDto profileDto, string authId)
+        public IActionResult CreateUser(ProfileDto profileDto)
         {
-            return Ok(_userService.CreateUser(profileDto, authId));
+            return Ok(_userService.CreateUser(profileDto));
+        }
+        
+        [HttpGet]
+        public IActionResult GetUser([FromQuery] Guid id)
+        {
+            return Ok(_userService.GetUser(id));
         }
     }
 }
