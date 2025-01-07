@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { Home } from "./pages/home";
 import { useState } from "react";
 import { Button } from "./components/ui/button";
+import { Profile } from "./pages/profile";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -29,9 +30,10 @@ function App() {
           <div className="justify-self-end">{button}</div>
         </div>
         <div className="pt-16">
-          <Routes>
+            <Routes>
             <Route path="/" element={<Home />} />
-          </Routes>
+            <Route path="/profile/:id" element={<Profile />} />
+            </Routes>
         </div>
       </div>
     </>

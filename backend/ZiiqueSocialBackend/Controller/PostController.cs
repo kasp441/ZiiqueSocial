@@ -41,6 +41,20 @@ public class PostController : ControllerBase
         }
     }
     
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetPostsByUser(Guid userId, [FromQuery]PaginationFilterDRO pagination)
+    {
+        try
+        {
+            PaginationFilter<Post> posts = await _postService.GetPostsByUser(userId, pagination);
+            return Ok(posts);
+        } catch (Exception e)
+        {
+            _logger.LogError(e, "Error getting posts");
+            return StatusCode(500, "It seems we cant quite get the posts right now, please try again later.");
+        }
+    }
+    
     /// <summary>
     /// Endpoint to create a new post to ZiiqueSocial
     /// </summary>

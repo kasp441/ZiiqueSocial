@@ -1,9 +1,11 @@
-﻿using Domain.Dto;
+﻿using Domain;
+using Domain.Dto;
 
 namespace Service
 {
     public interface IUserService
     {
-        ProfileDto CreateUser(ProfileDto profileDto, string authId);
+        Guid CreateUser(ProfileDto profileDto);
+        Profile GetUser(Guid id);
     }
 }

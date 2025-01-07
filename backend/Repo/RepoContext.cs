@@ -21,7 +21,10 @@ namespace Repo
             modelBuilder.Entity<Post>()
                 .HasKey(p => p.Id);
             modelBuilder.Entity<Post>()
-                .HasOne<Profile>().WithMany();
+                .HasOne<Profile>()
+                .WithMany()
+                .HasForeignKey(p => p.ProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

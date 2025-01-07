@@ -8,7 +8,7 @@ export interface PostEntity {
     title: string;
     content: string;
     createdAt: Date;
-    profileId: number;
+    profileId: string;
 }
 
 export interface PostCreate {
@@ -24,4 +24,13 @@ export interface Posts {
     pageSize: number;
     totalPages: number;
     totalRecords: number;
+}
+
+export interface Profile {
+    Guid: string;
+    username: string;
+    displayName: string;
+    profileIcon: string;
+    bio: string;
+    StartedAt: Date;
 }

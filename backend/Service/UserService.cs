@@ -2,6 +2,7 @@
 using Domain;
 using Domain.Dto;
 using Repo;
+using Profile = Domain.Profile;
 
 
 namespace Service
@@ -17,14 +18,18 @@ namespace Service
             _mapper = mapper;
         }
 
-        public ProfileDto CreateUser(ProfileDto profileDto, string AuthId)
+        public Guid CreateUser(ProfileDto profileDto)
         {
             //map to domain objects
             var profile = _mapper.Map<Domain.Profile>(profileDto);
 
-            profile.authId = AuthId;
 
-            return _mapper.Map<ProfileDto>(_profileRepo.AddProfile(profile));
+            return _profileRepo.AddProfile(profile).Guid;
+        }
+
+        public Profile GetUser(Guid id)
+        {
+            return _profileRepo.GetProfile(id);
         }
     }
 }
