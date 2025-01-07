@@ -1,11 +1,20 @@
 import { NewPost } from "@/components/comp/newPost";
-import { Posts } from "../Entities/BackendEnt";
+import { Posts, Profile } from "../Entities/BackendEnt";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { postService } from "@/components/services/postService";
 import { Post } from "@/components/comp/post";
+import { Dictionary } from "@/Entities/HelperEnt";
+import { profileService } from "@/components/services/profileService";
 
 export function Home() {
-  const [posts, setPosts] = useState<Posts>({ items: [], pageNumber: 0, pageSize: 0, totalPages: 0, totalRecords: 0 });
+  const [posts, setPosts] = useState<Posts>({
+    items: [],
+    pageNumber: 0,
+    pageSize: 0,
+    totalPages: 0,
+    totalRecords: 0,
+  });
+  const [profiles, setProfiles] = useState<Dictionary<Profile>>({});  
   const [loading, setLoading] = useState<boolean>(false);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
@@ -14,11 +23,20 @@ export function Home() {
   const isInitialLoad = useRef<boolean>(true);
 
   const loadMorePosts = useCallback(async () => {
-
     if (loading || !hasMore) return;
     setLoading(true);
 
-    const newPosts = await postService.getPosts({ page: pageNumber, pageSize: 10 });
+    const newPosts = await postService.getPosts({
+      page: pageNumber,
+      pageSize: 10,
+    });
+    const newProfiles: Dictionary<Profile> = {};
+    for (const post of newPosts.items) {
+      if (!profiles[post.profileId]) {
+        newProfiles[post.profileId] = await profileService.getProfile(post.profileId);
+      }
+    }
+    setProfiles((prevProfiles) => ({ ...prevProfiles, ...newProfiles }));
     setPosts((prevPosts) => ({
       items: [...prevPosts.items, ...newPosts.items],
       pageNumber: newPosts.pageNumber,
@@ -26,9 +44,11 @@ export function Home() {
       totalPages: newPosts.totalPages,
       totalRecords: newPosts.totalRecords,
     }));
-    setHasMore(newPosts.totalRecords > posts.items.length + newPosts.items.length);
+    setHasMore(
+      newPosts.totalRecords > posts.items.length + newPosts.items.length
+    );
     setLoading(false);
-  }, [pageNumber, loading, posts, hasMore]);
+  }, [loading, hasMore, pageNumber, posts.items.length, profiles]);
 
   const lastPostElementRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -64,32 +84,39 @@ export function Home() {
     <div className="grid grid-cols-1">
       <div className="justify-items-center">
         <NewPost />
-        <br/>
+        <br />
         {posts.items.map((post, index) => (
-          <div className="w-1/2 pb-5" key={post.id} ref={index === posts.items.length - 1 ? lastPostElementRef : null}>
+          <div
+            className="w-1/2 pb-5"
+            key={post.id}
+            ref={index === posts.items.length - 1 ? lastPostElementRef : null}
+          >
             <Post
               title={post.title}
               content={post.content}
               date={post.createdAt}
-              userIcon="Brian"
-              userName="SmiteAndSlam"
+              userIcon={profiles[post.profileId]?.profileIcon}
+              userName={profiles[post.profileId]?.displayName}
               profileId={post.profileId}
             />
           </div>
         ))}
       </div>
-    {loading && (
-      <div className="flex justify-center items-center">
-        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
-          <span className="visually-hidden">Loading...</span>
+      {loading && (
+        <div className="flex justify-center items-center">
+          <div
+            className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"
+            role="status"
+          >
+            <span className="visually-hidden">Loading...</span>
+          </div>
         </div>
-      </div>
-    )}
-    {!hasMore && !loading && (
-      <div className="flex justify-center items-center">
-        <h1>YOU HAVE SEEN EVERYTHING</h1>
-      </div>
-    )}
+      )}
+      {!hasMore && !loading && (
+        <div className="flex justify-center items-center">
+          <h1>YOU HAVE SEEN EVERYTHING</h1>
+        </div>
+      )}
     </div>
   );
 }

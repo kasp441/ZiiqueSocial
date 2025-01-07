@@ -29,6 +29,24 @@ public class PostRepo : IPostRepo
         };
     }
 
+    public async Task<PaginationFilter<Post>> GetPostsByUser(Guid userId, PaginationFilterDRO pagination)
+    {
+        var posts = await _context.Posts
+            .Where(p => p.ProfileId == userId)
+            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
+            .Take(pagination.PageSize)
+            .ToListAsync();
+        var totalRecords = _context.Posts.Count(p => p.ProfileId == userId);
+        return new PaginationFilter<Post>
+        {
+            Items = posts,
+            PageNumber = pagination.PageNumber,
+            PageSize = pagination.PageSize,
+            TotalPages = (int)Math.Ceiling((double)totalRecords / pagination.PageSize),
+            TotalRecords = totalRecords
+        };
+    }
+
     public async Task CreatePost(Post post)
     {
         await _context.Posts.AddAsync(post);
