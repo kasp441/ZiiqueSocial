@@ -1,9 +1,10 @@
 import Keycloak from 'keycloak-js';
 
 const keycloak = new Keycloak({
-  url: 'https://localhost:8090',
+  url: 'http://localhost:8090',
   realm: 'ziiqueSocial',
-  clientId: 'ZiiqueSocial'
+  clientId: 'Ziique',
 });
+
 
 export default keycloak;

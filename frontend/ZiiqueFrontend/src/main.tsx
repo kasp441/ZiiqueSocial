@@ -7,12 +7,11 @@ import keycloak from './security.ts'
 import {ReactKeycloakProvider} from '@react-keycloak/web'
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <ReactKeycloakProvider authClient={keycloak}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ReactKeycloakProvider authClient={keycloak} >
+      <StrictMode>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+      </StrictMode>
     </ReactKeycloakProvider>
-  </StrictMode>,
 )
-
