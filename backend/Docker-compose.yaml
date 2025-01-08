@@ -1,13 +1,9 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:latest
     restart: always
-    environment:
-      POSTGRES_USER: Ziique
-      POSTGRES_PASSWORD: SuperSecret7!
-      POSTGRES_DB: ZiiqueSocialDb
+    env_file:
+      - docker_secrets.env
     ports:
       - "5432:5432"
     volumes:
@@ -23,14 +19,13 @@ services:
       - "8081:8081"
     depends_on:
       - db
-    environment:
-      - CONNECTION_STRING=Host=db;Port=5432;Username=Ziique;Password=SuperSecret7!;Database=ZiiqueSocialDb
+    env_file:
+      - docker_secrets.env
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
-    environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
+    env_file:
+      - docker_secrets.env
     ports:
       - "8090:8080"
     command: start-dev
