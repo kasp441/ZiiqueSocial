@@ -50,6 +50,8 @@ builder.Services.AddScoped<IPostRepo, PostRepo>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IPAuthRepo, PAuthRepo>();
 builder.Services.AddScoped<IPAuthService, PAuthService>();
+builder.Services.AddScoped<IFollowRepo, FollowRepo>();
+builder.Services.AddScoped<IFollowService, FollowService>();
 
 builder.Services.AddScoped<IRequestData, RequestData>();
 

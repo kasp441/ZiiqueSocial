@@ -16,8 +16,7 @@ export function NewPost() {
         const postToPost = {
             title,
             content,
-            createdAt: new Date(),
-            profileId: keycloak.subject
+            createdAt: new Date()
         } as PostCreate;
         postService.postPost(postToPost);
     };

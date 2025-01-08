@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
 using Domain;
 using Domain.Dto;
 using Microsoft.AspNetCore.Authorization;
@@ -33,7 +34,16 @@ public class PostController : ControllerBase
     {
         try
         {
-            PaginationFilter<Post> posts = await _postService.GetPosts(pagination);
+            var authId = Guid.Empty;
+            if (!string.IsNullOrEmpty(Request.Headers["Authorization"]))
+            {
+                var authHeader = Request.Headers["Authorization"].ToString();
+                var token = authHeader.Substring("Bearer ".Length).Trim();
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(token);
+                authId = Guid.Parse(jwtToken.Claims.First(claim => claim.Type == "sub").Value);
+            }
+            PaginationFilter<Post> posts = await _postService.GetPosts(pagination, authId);
             return Ok(posts);
         } catch (Exception e)
         {
@@ -70,7 +80,12 @@ public class PostController : ControllerBase
     {
         try
         {
-            await _postService.CreatePost(post);
+            var authHeader = Request.Headers["Authorization"].ToString();
+            var token = authHeader.Substring("Bearer ".Length).Trim();
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var authId = Guid.Parse(jwtToken.Claims.First(claim => claim.Type == "sub").Value);
+            await _postService.CreatePost(post, authId);
             return Ok(post);
         }
         catch (ValidationException)
