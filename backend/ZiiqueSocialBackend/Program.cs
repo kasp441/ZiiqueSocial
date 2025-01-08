@@ -60,14 +60,7 @@ var mapper = new MapperConfiguration(config =>
 
 builder.Services.AddSingleton(mapper);
 
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-var envConnectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
-if (!string.IsNullOrWhiteSpace(envConnectionString))
-{
-    connectionString = envConnectionString;
-}
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
 //add connection string here
 builder.Services.AddDbContext<RepoContext>(options =>
