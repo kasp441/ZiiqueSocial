@@ -4,10 +4,12 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Switch } from "../ui/switch";
 import { useState } from "react";
+import { useKeycloak } from "@react-keycloak/web";
 
 export function NewPost() {
     const [title, setTitle] = useState<string>('');
     const [content, setContent] = useState<string>('');
+    const { keycloak } = useKeycloak(); 
     //const [onlyFolowers, setOnlyFolowers] = useState<boolean>(false);
 
     const post = async () => {
@@ -15,7 +17,7 @@ export function NewPost() {
             title,
             content,
             createdAt: new Date(),
-            profileId: "d49a345c-1211-46b0-9fde-7ce5163544b1"
+            profileId: keycloak.subject
         } as PostCreate;
         postService.postPost(postToPost);
     };

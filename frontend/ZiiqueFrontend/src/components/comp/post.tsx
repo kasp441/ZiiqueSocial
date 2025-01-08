@@ -40,7 +40,7 @@ export function Post({ title, content, date, userIcon, userName, profileId }: Po
           <div className="self-center text-left line-clamp-1 max-w-96">
             {title}
           </div>
-          <div className="flex items-center"
+          <div className="flex items-center cursor-pointer"
             onClick={goToProfile}>
             <p className="mr-2">{userName}</p>
             <img

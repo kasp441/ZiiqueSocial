@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Linq;
 using Repo;
 using Service;
 
@@ -82,12 +83,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.Authority = builder.Configuration["KeyCloak:Issuer"];
         options.RequireHttpsMetadata = false; // Need to see if we can get a certificate to run keycloak on https
+        
+        var jwk = new JsonWebKey(); 
+        
+        using(HttpClient client = new HttpClient())
+        {
+            var jwkString = client.GetStringAsync("http://keycloak:8080/realms/ziiqueSocial/protocol/openid-connect/certs").Result;
+            var jsonObject = JObject.Parse(jwkString);
+            var cert = jsonObject["keys"][0];
+            jwk = new JsonWebKey(cert.ToString());
+        }
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateAudience = false,
-            ValidateIssuer = true,
             ValidIssuer = builder.Configuration["KeyCloak:Issuer"],
-            ValidateLifetime = true
+            IssuerSigningKey = jwk,
+                
+            ValidateIssuer = true,
+            ValidateIssuerSigningKey = true,
+            ValidateAudience = false,
+            ValidateLifetime = true,
         };
     });
 builder.Services.AddAuthorization();

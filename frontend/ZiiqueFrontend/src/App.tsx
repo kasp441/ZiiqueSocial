@@ -1,13 +1,16 @@
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { Home } from "./pages/home";
 import { Button } from "./components/ui/button";
 import { useKeycloak } from "@react-keycloak/web";
 import { Profile } from "./pages/profile";
+import { CheckCreation } from "./pages/checkCreation";
+import { ProfileCreation } from "./pages/profileCreation";
 
 
 function App() {
   const { keycloak } = useKeycloak();
+  const navigate = useNavigate();
 
 
   const handleLogout = () =>
@@ -18,6 +21,7 @@ function App() {
 const handleLogin = () => {
   keycloak.login({
     prompt: "login",
+    redirectUri: window.location.origin + "/check",
   });
 };
 
@@ -31,7 +35,7 @@ return (
   <>
     <div className="bg-background">
       <div className="grid grid-cols-2 sticky top-10">
-        <h1 className="justify-self-start box-decoration-clone bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-2 rounded-md font-bold text-2xl">
+        <h1 onClick={() => {navigate("/home")}} className="justify-self-start box-decoration-clone bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-2 rounded-md font-bold text-2xl cursor-pointer">
           Ziique
           <br />
           Social
@@ -42,6 +46,8 @@ return (
         <Routes>
           <Route path="/home" element={<Home />} />
           <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/check" element={<CheckCreation/>} />
+          <Route path="/newprofile" element={<ProfileCreation />} /> 
         </Routes>
       </div>
     </div>

@@ -34,3 +34,11 @@ export interface Profile {
     bio: string;
     StartedAt: Date;
 }
+
+export interface ProfileDto {
+    username: string;
+    displayName: string;
+    profileIcon: string;
+    bio: string;
+    StartedAt: Date;
+}

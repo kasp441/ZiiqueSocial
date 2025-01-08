@@ -15,7 +15,7 @@ services:
       dockerfile: ZiiqueSocialBackend/Dockerfile
     restart: always
     ports:
-      - "8080:8080"
+      - "8090:8080"
       - "8081:8081"
     depends_on:
       - db
@@ -27,7 +27,7 @@ services:
     env_file:
       - docker_secrets.env
     ports:
-      - "8090:8080"
+      - "8080:8080"
     command: start-dev
 
 volumes:
