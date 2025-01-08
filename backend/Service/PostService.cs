@@ -12,9 +12,9 @@ public class PostService : IPostService
         _postRepo = postRepo;
     }
     
-    public async Task<PaginationFilter<Post>> GetPosts(PaginationFilterDRO pagination)
+    public async Task<PaginationFilter<Post>> GetPosts(PaginationFilterDRO pagination, Guid userId)
     {
-        return await _postRepo.GetPosts(pagination);
+        return await _postRepo.GetPosts(pagination, userId);
     }
     
     public async Task<PaginationFilter<Post>> GetPostsByUser(Guid userId, PaginationFilterDRO pagination)
@@ -22,7 +22,7 @@ public class PostService : IPostService
         return await _postRepo.GetPostsByUser(userId, pagination);
     }
 
-    public async Task<Post> CreatePost(PostDto postDto)
+    public async Task<Post> CreatePost(PostDto postDto, Guid userId)
     {
         Post post = new Post()
         {
@@ -30,7 +30,8 @@ public class PostService : IPostService
             Title = postDto.Title,
             Content = postDto.Content,
             CreatedAt = postDto.CreatedAt,
-            ProfileId = postDto.ProfileId
+            ProfileId = userId,
+            Visibility = postDto.Visibility
         };
         await _postRepo.CreatePost(post);
         return post;

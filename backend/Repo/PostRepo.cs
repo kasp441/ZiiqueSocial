@@ -11,14 +11,26 @@ public class PostRepo : IPostRepo
         _context = context;
     }
     
-    public async Task<PaginationFilter<Post>> GetPosts(PaginationFilterDRO pagination)
+    public async Task<PaginationFilter<Post>> GetPosts(PaginationFilterDRO pagination, Guid userId)
     {
-        //TODO: Check after if the user is allowed too see the posts
+        var follows = await _context.Follows
+            .Where(f => f.follows.Guid == userId)
+            .Select(f => f.profile.Guid)
+            .ToListAsync();
+
         var posts = await _context.Posts
+            .Where(p => p.Visibility == Visibility.Public ||
+                        ((p.Visibility == Visibility.Followers && follows.Contains(p.ProfileId)) || p.ProfileId == userId) ||
+                        (p.Visibility == Visibility.Private && p.ProfileId == userId))
             .Skip((pagination.PageNumber - 1) * pagination.PageSize)
             .Take(pagination.PageSize)
             .ToListAsync();
-        var totalRecords = _context.Posts.Count();
+
+        var totalRecords = await _context.Posts
+            .CountAsync(p => p.Visibility == Visibility.Public ||
+                             (p.Visibility == Visibility.Followers && follows.Contains(p.ProfileId)) ||
+                             (p.Visibility == Visibility.Private && p.ProfileId == userId));
+
         return new PaginationFilter<Post>
         {
             Items = posts,

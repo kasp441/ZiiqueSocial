@@ -14,8 +14,7 @@ export function NewPost() {
         const postToPost = {
             title,
             content,
-            createdAt: new Date(),
-            profileId: "d49a345c-1211-46b0-9fde-7ce5163544b1"
+            createdAt: new Date()
         } as PostCreate;
         postService.postPost(postToPost);
     };

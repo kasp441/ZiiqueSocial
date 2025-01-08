@@ -15,7 +15,6 @@ export interface PostCreate {
     title: string;
     content: string;
     createdAt: Date;
-    profileId: string;
 }
 
 export interface Posts {
