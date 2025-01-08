@@ -87,16 +87,10 @@ export function Home() {
       <div className="justify-items-center">
         {keycloak.authenticated ?
         (
-          <div>
-            <h1>Logged in        
-           </h1> 
-            <NewPost />
-          </div>
-
-        
+          <NewPost />
       )
         : 
-        <h1>Not logged in</h1>
+        <></>
         }
         <br/>
         {posts.items.map((post, index) => (

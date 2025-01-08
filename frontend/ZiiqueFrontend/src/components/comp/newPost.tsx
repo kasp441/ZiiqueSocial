@@ -4,10 +4,12 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Switch } from "../ui/switch";
 import { useState } from "react";
+import { useKeycloak } from "@react-keycloak/web";
 
 export function NewPost() {
     const [title, setTitle] = useState<string>('');
     const [content, setContent] = useState<string>('');
+    const { keycloak } = useKeycloak(); 
     //const [onlyFolowers, setOnlyFolowers] = useState<boolean>(false);
 
     const post = async () => {

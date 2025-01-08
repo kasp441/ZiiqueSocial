@@ -1,2 +1,3 @@
-export const postServiceUrl = "https://localhost:7222/Post";
-export const profileServiceUrl = "https://localhost:7222/profile";
+export const postServiceUrl = "/Post";
+export const profileServiceUrl = "/profile";
+export const profileAuthServiceUrl = "/ProfileAuth"; 
