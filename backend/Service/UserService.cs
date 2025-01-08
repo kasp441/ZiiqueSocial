@@ -18,11 +18,11 @@ namespace Service
             _mapper = mapper;
         }
 
-        public Guid CreateUser(ProfileDto profileDto)
+        public Guid CreateUser(ProfileDto profileDto, Guid authId)
         {
             //map to domain objects
             var profile = _mapper.Map<Domain.Profile>(profileDto);
-
+            profile.Guid = authId;
 
             return _profileRepo.AddProfile(profile).Guid;
         }

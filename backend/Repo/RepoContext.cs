@@ -17,7 +17,7 @@ namespace Repo
         {
             modelBuilder.Entity<Profile>()
                 .HasKey(p => p.Guid);
-
+            
             modelBuilder.Entity<Post>()
                 .HasKey(p => p.Id);
             modelBuilder.Entity<Post>()

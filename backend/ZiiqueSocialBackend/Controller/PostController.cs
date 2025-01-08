@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Domain;
 using Domain.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Service;
@@ -60,6 +61,7 @@ public class PostController : ControllerBase
     /// </summary>
     /// <param name="post"></param>
     /// <returns>Same post given if it was created successful</returns>
+    [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(Post), 200)]
     [ProducesResponseType(typeof(BadRequest), 400)]
@@ -87,6 +89,7 @@ public class PostController : ControllerBase
     /// </summary>
     /// <param name="post"></param>
     /// <returns>Same post given if it was created successful</returns>
+    [Authorize]
     [HttpPut]
     [ProducesResponseType(200)]
     [ProducesResponseType(typeof(BadRequest), 400)]
@@ -114,6 +117,7 @@ public class PostController : ControllerBase
     /// </summary>
     /// <param name="postId"></param>
     /// <returns></returns>
+    [Authorize]
     [HttpDelete("{postId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(typeof(BadRequest), 404)]

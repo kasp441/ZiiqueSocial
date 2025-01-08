@@ -1,10 +1,12 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Repo;
 
 namespace ZiiqueSocialBackend.Controller
 {
+    [Authorize]
     [ApiController]
     [Route("requestData")]
     public class RequestDataController : ControllerBase
