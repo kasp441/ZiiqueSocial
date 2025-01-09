@@ -11,10 +11,12 @@ namespace ZiiqueSocialBackend.Controller;
 public class ProfileAuthController : ControllerBase
 {
     private readonly IPAuthService _profileAuthService;
+    private readonly ILogger<ProfileAuthController> _logger;
     
-    public ProfileAuthController(IPAuthService profileAuthService)
+    public ProfileAuthController(IPAuthService profileAuthService, ILogger<ProfileAuthController> logger)
     {
         _profileAuthService = profileAuthService;
+        _logger = logger;
     }
     
     [HttpGet("{authId}")]
@@ -26,6 +28,7 @@ public class ProfileAuthController : ControllerBase
             return Ok(exists);
         } catch (Exception e)
         {
+            _logger.LogError(e, "Error checking if profile exists {authId}", authId);
             return StatusCode(500, "It seems we cant quite get the posts right now, please try again later.");
         }
     }

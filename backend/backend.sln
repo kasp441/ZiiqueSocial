@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repo", "Repo\Repo.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{55FE840C-79D7-4BBA-A7A1-EF536BDDBC9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{DB63A7E2-BAEB-4FA1-BBFF-E881B2ADBFF7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{55FE840C-79D7-4BBA-A7A1-EF536BDDBC9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55FE840C-79D7-4BBA-A7A1-EF536BDDBC9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55FE840C-79D7-4BBA-A7A1-EF536BDDBC9E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DB63A7E2-BAEB-4FA1-BBFF-E881B2ADBFF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DB63A7E2-BAEB-4FA1-BBFF-E881B2ADBFF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DB63A7E2-BAEB-4FA1-BBFF-E881B2ADBFF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DB63A7E2-BAEB-4FA1-BBFF-E881B2ADBFF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

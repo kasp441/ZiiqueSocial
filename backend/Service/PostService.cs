@@ -1,5 +1,6 @@
 ﻿using Domain;
 using Domain.Dto;
+using Microsoft.Extensions.Logging;
 using Repo;
 
 namespace Service;
@@ -7,10 +8,12 @@ namespace Service;
 public class PostService : IPostService
 {
     private readonly IPostRepo _postRepo;
-    public PostService(IPostRepo postRepo)
+    private readonly ILogger<PostService> _logger;
+    public PostService(IPostRepo postRepo, ILogger<PostService> logger)
     {
         _postRepo = postRepo;
-    }
+        _logger = logger;
+    }   
     
     public async Task<PaginationFilter<Post>> GetPosts(PaginationFilterDRO pagination, Guid userId)
     {
@@ -29,9 +32,9 @@ public class PostService : IPostService
 
     public async Task<Post> CreatePost(PostDto postDto, Guid userId)
     {
-        Post post = new Post()
+        var post = new Post()
         {
-            Id = new Guid(),
+            Id = Guid.NewGuid(),
             Title = postDto.Title,
             Content = postDto.Content,
             CreatedAt = postDto.CreatedAt,
@@ -44,6 +47,7 @@ public class PostService : IPostService
 
     public async Task<Post> UpdatePost(Post post)
     {
+        _logger.LogWarning("Updating post with id: {id}", post.Id); 
         await _postRepo.UpdatePost(post);
         return post;
     }

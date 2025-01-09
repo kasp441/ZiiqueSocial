@@ -25,7 +25,7 @@ public class FollowRepo : IFollowRepo
 
     public Task Unfollow(Guid followerId, Guid followingId)
     {
-        _context.Follows.Remove(_context.Follows.FirstOrDefault(f => f.profile == followerId && f.follows == followingId)); 
+        _context.Follows.Remove(_context.Follows.FirstOrDefault(f => f.profile == followerId && f.follows == followingId) ?? throw new KeyNotFoundException("You are not following this user")); 
         return _context.SaveChangesAsync();
     }
 

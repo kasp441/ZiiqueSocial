@@ -11,12 +11,12 @@ namespace ZiiqueSocialBackend.Controller
     [Route("profile")]
     public class ProfileController : ControllerBase
     {
-        IUserService _userService;
-        IPAuthService _authService;
-        public ProfileController(IUserService userService, IPAuthService authService)
+        private readonly IUserService _userService;
+        private readonly ILogger<ProfileController> _logger;    
+        public ProfileController(IUserService userService, ILogger<ProfileController> logger)   
         {
+            _logger = logger;
             _userService = userService;
-            _authService = authService;
         }
 
         [Authorize]
@@ -24,19 +24,33 @@ namespace ZiiqueSocialBackend.Controller
         [Route("createProfile")]
         public IActionResult CreateUser(ProfileDto profileDto)
         {
-            var authHeader = Request.Headers["Authorization"].ToString();
-            var token = authHeader.Substring("Bearer ".Length).Trim();
-            var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadJwtToken(token);
-            var authId = Guid.Parse(jwtToken.Claims.First(claim => claim.Type == "sub").Value);
-            Guid newProfileId = _userService.CreateUser(profileDto, authId);
-            return Ok(newProfileId);
+            try
+            {
+                var authHeader = Request.Headers["Authorization"].ToString();
+                var token = authHeader.Substring("Bearer ".Length).Trim();
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(token);
+                var authId = Guid.Parse(jwtToken.Claims.First(claim => claim.Type == "sub").Value);
+                Guid newProfileId = _userService.CreateUser(profileDto, authId);
+                return Ok(newProfileId);
+            } catch (Exception e)
+            {
+                _logger.LogError(e, "Error creating user");
+                return StatusCode(500, "It seems we cant quite get the posts right now, please try again later.");
+            }   
         }
         
         [HttpGet]
         public IActionResult GetUser([FromQuery] Guid id)
         {
-            return Ok(_userService.GetUser(id));
+            try
+            {
+                return Ok(_userService.GetUser(id));
+            } catch (Exception e)
+            {
+                _logger.LogError(e, "Error getting user");
+                return StatusCode(500, "It seems we cant quite get the posts right now, please try again later.");  
+            }
         }
     }
 }
