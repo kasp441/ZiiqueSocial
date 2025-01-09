@@ -1,6 +1,4 @@
-﻿using Domain;
-
-namespace Service;
+﻿namespace Service;
 
 public interface IPAuthService
 {

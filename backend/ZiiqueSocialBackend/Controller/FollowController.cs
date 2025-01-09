@@ -11,10 +11,12 @@ namespace ZiiqueSocialBackend.Controller;
 public class FollowController : ControllerBase
 {
     private readonly IFollowService _followService;
+    private readonly ILogger<FollowController> _logger;
     
-    public FollowController(IFollowService followService)
+    public FollowController(IFollowService followService, ILogger<FollowController> logger)
     {
         _followService = followService;
+        _logger = logger;
     }
     
     [HttpPost]
@@ -32,6 +34,7 @@ public class FollowController : ControllerBase
             return Ok();
         } catch (Exception e)
         {
+            _logger.LogError(e, "Error following user");    
             return StatusCode(500, "It seems we cant quite get the posts right now, please try again later.");
         }
     }
@@ -51,6 +54,7 @@ public class FollowController : ControllerBase
             return Ok();
         } catch (Exception e)
         {
+            _logger.LogError(e, "Error unfollowing user");  
             return StatusCode(500, "It seems we cant quite get the posts right now, please try again later.");
         }
     }
@@ -70,6 +74,7 @@ public class FollowController : ControllerBase
             return Ok(followers);
         } catch (Exception e)
         {
+            _logger.LogError(e, "Error getting followers");
             return StatusCode(500, "It seems we cant quite get the posts right now, please try again later.");
         }
     }

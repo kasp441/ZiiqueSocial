@@ -1,6 +1,4 @@
-﻿using Domain;
-
-namespace Repo;
+﻿namespace Repo;
 
 public interface IPAuthRepo
 {
