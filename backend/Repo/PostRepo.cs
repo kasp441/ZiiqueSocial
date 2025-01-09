@@ -14,22 +14,24 @@ public class PostRepo : IPostRepo
     public async Task<PaginationFilter<Post>> GetPosts(PaginationFilterDRO pagination, Guid userId)
     {
         var follows = await _context.Follows
-            .Where(f => f.follows.Guid == userId)
-            .Select(f => f.profile.Guid)
+            .Where(f => f.follows == userId)
+            .Select(f => f.profile)
             .ToListAsync();
 
-        var posts = await _context.Posts
-            .Where(p => p.Visibility == Visibility.Public ||
-                        ((p.Visibility == Visibility.Followers && follows.Contains(p.ProfileId)) || p.ProfileId == userId) ||
-                        (p.Visibility == Visibility.Private && p.ProfileId == userId))
+        
+        var postsQuery = _context.Posts.Where(p =>
+            p.Visibility == Visibility.Public ||
+            (p.Visibility == Visibility.Followers && follows.Contains(p.ProfileId)) ||
+            p.ProfileId == userId);
+
+        
+        var posts = await postsQuery
             .Skip((pagination.PageNumber - 1) * pagination.PageSize)
             .Take(pagination.PageSize)
             .ToListAsync();
 
-        var totalRecords = await _context.Posts
-            .CountAsync(p => p.Visibility == Visibility.Public ||
-                             (p.Visibility == Visibility.Followers && follows.Contains(p.ProfileId)) ||
-                             (p.Visibility == Visibility.Private && p.ProfileId == userId));
+        
+        var totalRecords = await postsQuery.CountAsync();
 
         return new PaginationFilter<Post>
         {
@@ -41,14 +43,24 @@ public class PostRepo : IPostRepo
         };
     }
 
-    public async Task<PaginationFilter<Post>> GetPostsByUser(Guid userId, PaginationFilterDRO pagination)
+    public async Task<PaginationFilter<Post>> GetPostsByUser(Guid userId, Guid askingUser, PaginationFilterDRO pagination)
     {
-        var posts = await _context.Posts
-            .Where(p => p.ProfileId == userId)
+        var follows = await _context.Follows
+            .Where(f => f.follows == userId)
+            .Select(f => f.profile)
+            .ToListAsync();
+        
+        var postsQuery = _context.Posts.Where(p =>
+            (p.Visibility == Visibility.Public ||
+            (p.Visibility == Visibility.Followers && follows.Contains(p.ProfileId)) ||
+            p.ProfileId == askingUser) && p.ProfileId == userId);
+        
+        var posts = await postsQuery
             .Skip((pagination.PageNumber - 1) * pagination.PageSize)
             .Take(pagination.PageSize)
             .ToListAsync();
-        var totalRecords = _context.Posts.Count(p => p.ProfileId == userId);
+        
+        var totalRecords = await postsQuery.CountAsync();
         return new PaginationFilter<Post>
         {
             Items = posts,
@@ -69,6 +81,11 @@ public class PostRepo : IPostRepo
     {
         _context.Posts.Update(post);
         await _context.SaveChangesAsync();
+    }
+    
+    public async Task<Post> GetPost(Guid id)
+    {
+        return await _context.Posts.FindAsync(id) ?? throw new KeyNotFoundException("Could not find the post you are looking for");
     }
 
     public async Task DeletePost(Guid id)

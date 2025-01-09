@@ -111,10 +111,10 @@ export function Profile() {
             </div>
             {keycloak.authenticated && keycloak.subject !== id ? (
               <div>
-                {followers.includes(profile.Guid) ? (
+                {followers.includes(id!) ? (
                   <>
                     <Button
-                      onClick={() => followService.unfollowUser(profile.Guid)}
+                      onClick={() => followService.unfollowUser(id!)}
                     >
                       Unfollow
                     </Button>
@@ -122,7 +122,7 @@ export function Profile() {
                 ) : (
                   <>
                     <Button
-                      onClick={() => followService.followUser(profile.Guid)}
+                      onClick={() => followService.followUser(id!)}
                     >
                       Follow
                     </Button>

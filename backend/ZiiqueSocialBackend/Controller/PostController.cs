@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Domain;
 using Domain.Dto;
 using Microsoft.AspNetCore.Authorization;
@@ -57,7 +58,16 @@ public class PostController : ControllerBase
     {
         try
         {
-            PaginationFilter<Post> posts = await _postService.GetPostsByUser(userId, pagination);
+            var authId = Guid.Empty;
+            if (!string.IsNullOrEmpty(Request.Headers["Authorization"].ToString()))
+            {
+                var authHeader = Request.Headers["Authorization"].ToString();
+                var token = authHeader.Substring("Bearer ".Length).Trim();
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(token);
+                authId = Guid.Parse(jwtToken.Claims.First(claim => claim.Type == "sub").Value);
+            }
+            PaginationFilter<Post> posts = await _postService.GetPostsByUser(userId, authId, pagination);
             return Ok(posts);
         } catch (Exception e)
         {
@@ -100,34 +110,6 @@ public class PostController : ControllerBase
     }
     
     /// <summary>
-    /// Endpoint to change the content of a post
-    /// </summary>
-    /// <param name="post"></param>
-    /// <returns>Same post given if it was created successful</returns>
-    [Authorize]
-    [HttpPut]
-    [ProducesResponseType(200)]
-    [ProducesResponseType(typeof(BadRequest), 400)]
-    [ProducesResponseType(500)]
-    public async Task<IActionResult> UpdatePost(Post post)
-    {
-        try
-        {
-            await _postService.UpdatePost(post);
-            return Ok(post);
-        }
-        catch (ValidationException)
-        {
-            return BadRequest("You are trying to update the post with invalid data");
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error updating post");
-            return StatusCode(500, "It seems we cant quite update the post right now, please try again later.");
-        }
-    }
-    
-    /// <summary>
     /// Endpoint to remove one of your posts from ZiiqueSocial
     /// </summary>
     /// <param name="postId"></param>
@@ -141,6 +123,16 @@ public class PostController : ControllerBase
     {
         try
         {
+            Post post = await _postService.GetPost(postId);
+            var authHeader = Request.Headers["Authorization"].ToString();
+            var token = authHeader.Substring("Bearer ".Length).Trim();
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var authId = Guid.Parse(jwtToken.Claims.First(claim => claim.Type == "sub").Value);
+            if (post.ProfileId != authId)
+            {
+                return BadRequest("You are not allowed to delete this post");
+            }
             await _postService.DeletePost(postId);
             return Ok();   
         } catch (KeyNotFoundException)

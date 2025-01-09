@@ -9,7 +9,7 @@ namespace Domain
     public class Follows
     {
         public int Id { get; set; }
-        public virtual Profile profile { get; set; }
-        public virtual Profile follows { get; set; }
+        public Guid profile { get; set; }
+        public Guid follows { get; set; }
     }
 }

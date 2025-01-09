@@ -28,7 +28,7 @@ public class FollowService : IFollowService
         List<Guid> followersIds = new List<Guid>();
         foreach (Follows follow in followers)
         {
-            followersIds.Add(follow.follows.Guid);
+            followersIds.Add(follow.follows);
         }
         return followersIds;
     }

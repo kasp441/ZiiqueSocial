@@ -17,10 +17,15 @@ public class PostService : IPostService
         return await _postRepo.GetPosts(pagination, userId);
     }
     
-    public async Task<PaginationFilter<Post>> GetPostsByUser(Guid userId, PaginationFilterDRO pagination)
+    public async Task<PaginationFilter<Post>> GetPostsByUser(Guid userId, Guid askingUser, PaginationFilterDRO pagination)
     {
-        return await _postRepo.GetPostsByUser(userId, pagination);
+        return await _postRepo.GetPostsByUser(userId, askingUser, pagination);
     }
+    
+    public async Task<Post> GetPost(Guid id)
+    {
+        return await _postRepo.GetPost(id);
+    }   
 
     public async Task<Post> CreatePost(PostDto postDto, Guid userId)
     {
