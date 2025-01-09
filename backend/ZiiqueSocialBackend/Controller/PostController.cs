@@ -35,7 +35,7 @@ public class PostController : ControllerBase
         try
         {
             var authId = Guid.Empty;
-            if (!string.IsNullOrEmpty(Request.Headers["Authorization"]))
+            if (!string.IsNullOrEmpty(Request.Headers["Authorization"].ToString()))
             {
                 var authHeader = Request.Headers["Authorization"].ToString();
                 var token = authHeader.Substring("Bearer ".Length).Trim();

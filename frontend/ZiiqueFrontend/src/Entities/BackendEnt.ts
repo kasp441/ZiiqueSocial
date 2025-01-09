@@ -15,6 +15,7 @@ export interface PostCreate {
     title: string;
     content: string;
     createdAt: Date;
+    visibility: number;
 }
 
 export interface Posts {

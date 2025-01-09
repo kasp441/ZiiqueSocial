@@ -18,6 +18,7 @@ public class FollowController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Follow(Guid followingId)
     {
         try
@@ -36,6 +37,7 @@ public class FollowController : ControllerBase
     }
     
     [HttpDelete]
+    [Authorize]
     public async Task<IActionResult> Unfollow(Guid followingId)
     {
         try
@@ -47,6 +49,25 @@ public class FollowController : ControllerBase
             var authId = Guid.Parse(jwtToken.Claims.First(claim => claim.Type == "sub").Value);
             await _followService.Unfollow(authId, followingId);
             return Ok();
+        } catch (Exception e)
+        {
+            return StatusCode(500, "It seems we cant quite get the posts right now, please try again later.");
+        }
+    }
+    
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> GetFollowers()
+    {
+        try
+        {
+            var authHeader = Request.Headers["Authorization"].ToString();
+            var token = authHeader.Substring("Bearer ".Length).Trim();
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var authId = Guid.Parse(jwtToken.Claims.First(claim => claim.Type == "sub").Value);
+            var followers = await _followService.GetFollowers(authId);
+            return Ok(followers);
         } catch (Exception e)
         {
             return StatusCode(500, "It seems we cant quite get the posts right now, please try again later.");

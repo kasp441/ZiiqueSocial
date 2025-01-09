@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "../ui/button";
 import {
   Card,
   CardContent,
@@ -58,7 +57,6 @@ export function Post({ title, content, date, userIcon, userName, profileId }: Po
         ) : null}
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button className="bg-Primary">Like</Button>
         <p>{new Date(date).toDateString()}</p>
       </CardFooter>
     </Card>

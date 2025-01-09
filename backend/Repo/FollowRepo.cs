@@ -30,4 +30,9 @@ public class FollowRepo : IFollowRepo
         _context.Follows.Remove(_context.Follows.FirstOrDefault(f => f.profile.Guid == followerId && f.follows.Guid == followingId)); 
         return _context.SaveChangesAsync();
     }
+
+    public Task<List<Follows>> GetFollowers(Guid userId)
+    {
+        return _context.Follows.Where(f => f.follows.Guid == userId).ToListAsync();
+    }
 }

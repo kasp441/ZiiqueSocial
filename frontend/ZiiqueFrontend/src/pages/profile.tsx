@@ -4,9 +4,15 @@ import type { Posts, Profile } from "@/Entities/BackendEnt";
 import { useParams } from "react-router-dom";
 import { postService } from "@/components/services/postService";
 import { Post } from "@/components/comp/post";
+import { useKeycloak } from "@react-keycloak/web";
+import { followService } from "@/components/services/followService";
+import { useGlobalStateFollowers } from "@/components/helpers/globalStateContext";
+import { Button } from "@/components/ui/button";
 
 export function Profile() {
   const { id } = useParams();
+  const { keycloak } = useKeycloak();
+  const { followers, setFollowers } = useGlobalStateFollowers();
 
   const [profile, setProfile] = useState<Profile>();
   const [posts, setPosts] = useState<Posts>({
@@ -63,12 +69,16 @@ export function Profile() {
 
   useEffect(() => {
     if (id) {
-      console.log(id);
       profileService.getProfile(id).then((profile) => {
         setProfile(profile);
       });
+      if (keycloak.authenticated) {
+        followService.getFollowers().then((followers) => {
+          setFollowers(followers);
+        });
+      }
     }
-  }, [id]);
+  }, [id, keycloak.authenticated, keycloak.subject, setFollowers]);
 
   useEffect(() => {
     if (isInitialLoad.current) {
@@ -99,26 +109,51 @@ export function Profile() {
               <h2 className="text-4xl">{profile.displayName}</h2>
               <h3 className="font-bold">@{profile.username}</h3>
             </div>
+            {keycloak.authenticated && keycloak.subject !== id ? (
+              <div>
+                {followers.includes(profile.Guid) ? (
+                  <>
+                    <Button
+                      onClick={() => followService.unfollowUser(profile.Guid)}
+                    >
+                      Unfollow
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      onClick={() => followService.followUser(profile.Guid)}
+                    >
+                      Follow
+                    </Button>
+                  </>
+                )}
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
 
           <br />
           <div className="justify-items-center">
-          {posts.items.map((post, index) => (
-            <div
-              className="w-1/2 pb-5"
-              key={post.id}
-              ref={index === posts.items.length - 1 ? lastPostElementRef : null}
-            >
-              <Post
-                title={post.title}
-                content={post.content}
-                date={post.createdAt}
-                userIcon={profile.profileIcon}
-                userName={profile.displayName}
-                profileId={post.profileId}
-              />
-            </div>
-          ))}
+            {posts.items.map((post, index) => (
+              <div
+                className="w-1/2 pb-5"
+                key={post.id}
+                ref={
+                  index === posts.items.length - 1 ? lastPostElementRef : null
+                }
+              >
+                <Post
+                  title={post.title}
+                  content={post.content}
+                  date={post.createdAt}
+                  userIcon={profile.profileIcon}
+                  userName={profile.displayName}
+                  profileId={post.profileId}
+                />
+              </div>
+            ))}
           </div>
         </>
       ) : (
