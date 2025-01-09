@@ -14,12 +14,10 @@ public class FollowRepo : IFollowRepo
     
     public async Task Follow(Guid followerId, Guid followingId)
     {
-        var profile = await _context.Profiles.FindAsync(followerId);
-        var following = await _context.Profiles.FindAsync(followingId); 
-        var follow = new Follows
+        Follows follow = new Follows
         {
-            profile = profile,
-            follows = following
+            profile = followerId,
+            follows = followingId
         };
         await _context.Follows.AddAsync(follow);
         await _context.SaveChangesAsync();
@@ -27,12 +25,13 @@ public class FollowRepo : IFollowRepo
 
     public Task Unfollow(Guid followerId, Guid followingId)
     {
-        _context.Follows.Remove(_context.Follows.FirstOrDefault(f => f.profile.Guid == followerId && f.follows.Guid == followingId)); 
+        _context.Follows.Remove(_context.Follows.FirstOrDefault(f => f.profile == followerId && f.follows == followingId)); 
         return _context.SaveChangesAsync();
     }
 
-    public Task<List<Follows>> GetFollowers(Guid userId)
+    public async Task<List<Follows>> GetFollowers(Guid userId)
     {
-        return _context.Follows.Where(f => f.follows.Guid == userId).ToListAsync();
+        var follows = await _context.Follows.Where(f => f.profile == userId).ToListAsync();
+        return follows;
     }
 }

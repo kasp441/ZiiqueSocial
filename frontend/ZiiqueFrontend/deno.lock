@@ -1858,6 +1858,7 @@
       "dependencies": [
         "npm:@eslint/js@^9.11.1",
         "npm:@hookform/resolvers@^3.10.0",
+        "npm:@radix-ui/react-dropdown-menu@^2.1.4",
         "npm:@radix-ui/react-label@^2.1.1",
         "npm:@radix-ui/react-slot@^1.1.1",
         "npm:@radix-ui/react-switch@^1.1.1",

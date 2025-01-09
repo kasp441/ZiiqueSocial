@@ -53,8 +53,6 @@ builder.Services.AddScoped<IPAuthService, PAuthService>();
 builder.Services.AddScoped<IFollowRepo, FollowRepo>();
 builder.Services.AddScoped<IFollowService, FollowService>();
 
-builder.Services.AddScoped<IRequestData, RequestData>();
-
 var mapper = new MapperConfiguration(config =>
 {
     config.CreateMap<ProfileDto, Domain.Profile>();
