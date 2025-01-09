@@ -43,12 +43,18 @@ return (
         <div className="justify-self-end">{button}</div>
       </div>
       <div className="pt-16">
-        <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route path="/profile/:id" element={<Profile />} />
-          <Route path="/check" element={<CheckCreation/>} />
-          <Route path="/newprofile" element={<ProfileCreation />} /> 
-        </Routes>
+        { !keycloak.didInitialize ? (
+          <div>Loading...</div>
+        ) : (
+          <>
+            <Routes>
+              <Route path="/home" element={<Home />} />
+              <Route path="/profile/:id" element={<Profile />} />
+              <Route path="/check" element={<CheckCreation />} />
+              <Route path="/newprofile" element={<ProfileCreation />} />
+            </Routes>
+          </>
+        )}
       </div>
     </div>
   </>
