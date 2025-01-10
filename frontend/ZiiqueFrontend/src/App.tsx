@@ -1,35 +1,64 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { Home } from "./pages/home";
+import { Button } from "./components/ui/button";
+import { useKeycloak } from "@react-keycloak/web";
+import { Profile } from "./pages/profile";
+import { CheckCreation } from "./pages/checkCreation";
+import { ProfileCreation } from "./pages/profileCreation";
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { keycloak } = useKeycloak();
+  const navigate = useNavigate();
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+
+  const handleLogout = () =>
+  {
+    keycloak.logout();
+};
+
+const handleLogin = () => {
+  keycloak.login({
+    prompt: "login",
+    redirectUri: window.location.origin + "/check",
+  });
+};
+
+const button = keycloak.authenticated ? (
+  <Button onClick={handleLogout}>Logout</Button>
+) : (
+  <Button onClick={handleLogin}>Login</Button>
+);
+
+return (
+  <>
+    <div className="bg-background">
+      <div className="grid grid-cols-2 sticky top-10">
+        <h1 onClick={() => {navigate("/home")}} className="justify-self-start box-decoration-clone bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-2 rounded-md font-bold text-2xl cursor-pointer">
+          Ziique
+          <br />
+          Social
+        </h1>
+        <div className="justify-self-end">{button}</div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className="pt-16">
+        { !keycloak.didInitialize ? (
+          <div>Loading...</div>
+        ) : (
+          <>
+            <Routes>
+              <Route path="/home" element={<Home />} />
+              <Route path="/profile/:id" element={<Profile />} />
+              <Route path="/check" element={<CheckCreation />} />
+              <Route path="/newprofile" element={<ProfileCreation />} />
+            </Routes>
+          </>
+        )}
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  </>
+);
 }
 
-export default App
+export default App;
