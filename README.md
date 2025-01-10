@@ -43,7 +43,7 @@ After all node modules have been installed you can run the frontend with ```npm 
 1. Navigate to `ZiiqueSocial/backend`.
 2. Run the following command in a terminal:
 
-   docker compose up -d
+```docker compose up -d```                  
 Verify that all containers have started.
 
 Setting Up Keycloak
@@ -53,9 +53,9 @@ In a browser, go to http://localhost:8080/.
 
 Log in with the credentials from docker_secrets.env:
 
-env
-KEYCLOAK_ADMIN=
-KEYCLOAK_ADMIN_PASSWORD=
+
+KEYCLOAK_ADMIN=                                    
+KEYCLOAK_ADMIN_PASSWORD=                              
 After logging in, in the top left corner, press the "Keycloak master" button and then press "Create realm".
 
 Drag the ziique-export.json file into the big white field and make sure "Enabled" is set to "On".
